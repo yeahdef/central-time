@@ -4,7 +4,9 @@ function walk(node)
 {
 	// I stole this function from here:
 	// http://is.gd/mwZp7E
-	
+	// I stole this function from here:
+	// https://github.com/panicsteve/cloud-to-butt/
+
 	var child, next;
 
 	switch ( node.nodeType )  
@@ -30,13 +32,15 @@ function walk(node)
 function handleText(textNode) 
 {
 	var v = textNode.nodeValue;
+	Pattern p = Pattern.compile('^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):) ?(PST|MNT|EST|PT|MT|ET)$');
+	Matcher m = p.matcher(v);
 
-	v = v.replace(/\bThe Cloud\b/g, "My Butt");
-	v = v.replace(/\bThe cloud\b/g, "My butt");
-	v = v.replace(/\bthe Cloud\b/g, "my Butt");
-	v = v.replace(/\bthe cloud\b/g, "my butt");
+	// try to match on a date looking bit 
+	if (m) {
+
+		v = v.replace(/\bThe Cloud\b/g, "My Butt");
+	}
+
 	
 	textNode.nodeValue = v;
 }
-
-
