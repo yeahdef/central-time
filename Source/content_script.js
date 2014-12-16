@@ -25,6 +25,12 @@ function walk(node)
 	}
 }
 
+function pad(num, size) {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
 function handleText(textNode) 
 {
 	// look at the text
@@ -32,11 +38,12 @@ function handleText(textNode)
 	// try to match on a date looking bit 
 	var m = v.search('^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)\\s??(?:am|pm|AM|PM)\\s??(?:PST|MNT|EST|PT|MT|ET)$');
 	// if it matches, parse it to datetime
-	if (m) {
-		var hour = v.split(':')[0].replace(/\W+/g, " ")
-		// var minute = v.split(':')[1].replace(/\W+/g, " ")
+	if (m > 0)
+	{
+		var hour = v.split(':')[0]
+		var minute = v.split(':')[1].replace(/\W+/g, " ")
 		// var am = v.split(':')[1].replace(/\W+/g, " ")
-		// var tz = v.split(':')[1].replace(/\W+/g, " ")
+		var tz = v.split(' ')[-1]
 		// determine the offset
 		var offset = 0
 		switch (tz)  
@@ -56,8 +63,9 @@ function handleText(textNode)
 		}
 		// apply the offset
 		hour = hour + offset
-		var d = new Date(hour=hour)
-		v = v.replace(/\bpm\b/g, "My Butt");
+		hour = pad(hour, 2)
+		var d = new Date('2014', '1', '1', hour, minute)
+		v = d.getHours() + ':' + d.getMinutes();
 	}
 	textNode.nodeValue = v;
 }
